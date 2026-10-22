@@ -1,0 +1,5 @@
+/build/
+/dist/
+/nbproject/private/
+*.log
+# attendance.war is intentionally committed for the tutorial Docker deployment.

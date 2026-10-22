@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="attendance" default="dist" basedir=".">
+    <description>Java 11 Ant Web Application for Tomcat 9; no Maven or frameworks.</description>
+    <property file="nbproject/private/private.properties"/>
+    <property file="nbproject/project.properties"/>
+    <property environment="env"/>
+    <property name="tomcat.home" location="${env.CATALINA_HOME}"/>
+    <target name="init">
+        <available file="${tomcat.home}/lib/servlet-api.jar" property="servlet.available"/>
+        <fail unless="servlet.available" message="Set CATALINA_HOME or -Dtomcat.home to your Tomcat 9 directory."/>
+        <mkdir dir="${build.web.dir}/WEB-INF/classes"/>
+        <mkdir dir="${dist.dir}"/>
+    </target>
+    <target name="compile" depends="init">
+        <copy todir="${build.web.dir}"><fileset dir="${web.docbase.dir}"/></copy>
+        <javac srcdir="${src.dir}" destdir="${build.web.dir}/WEB-INF/classes"
+               release="11" encoding="UTF-8" includeantruntime="false" debug="true">
+            <classpath><pathelement location="${tomcat.home}/lib/servlet-api.jar"/></classpath>
+        </javac>
+    </target>
+    <target name="dist" depends="compile">
+        <war destfile="${dist.war}" webxml="${web.docbase.dir}/WEB-INF/web.xml">
+            <fileset dir="${build.web.dir}" excludes="WEB-INF/web.xml"/>
+        </war>
+        <copy file="${dist.war}" tofile="attendance.war"/>
+    </target>
+    <target name="run" depends="dist">
+        <copy file="${dist.war}" todir="${tomcat.home}/webapps"/>
+        <echo>Start Tomcat, then open http://localhost/attendance/</echo>
+    </target>
+    <target name="clean">
+        <delete dir="${build.dir}"/>
+        <delete dir="${dist.dir}"/>
+        <delete file="attendance.war"/>
+    </target>
+    <target name="javadoc" depends="init">
+        <javadoc sourcepath="${src.dir}" destdir="${dist.dir}/javadoc" failonerror="true">
+            <classpath><pathelement location="${tomcat.home}/lib/servlet-api.jar"/></classpath>
+        </javadoc>
+    </target>
+</project>
