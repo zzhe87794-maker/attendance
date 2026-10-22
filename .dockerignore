@@ -1,0 +1,7 @@
+# The tutorial deploys a prebuilt WAR; only these runtime inputs are needed.
+**
+!Dockerfile
+!attendance.war
+!entrypoint.sh
+!deploy-root/
+!deploy-root/index.html
